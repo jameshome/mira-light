@@ -186,6 +186,7 @@ void setupOTA(const char *nameprefix, const char *ssid, const char *password)
   Serial.println(WiFi.localIP());
 }
 
+// Event handling setup
 void loopEvents()
 {
   changeBrightness();
