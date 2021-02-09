@@ -2,7 +2,7 @@
 
 **(mira is pre-release — many features are not yet implemented or working correctly)**
 
-mira is an open source control interface for an arbitrary number of individually addressable strip LEDs. It’s designed to make primary interactions obvious and reliable, while allowing for secondary interactions that are flexible and ridiculous. It will do this by providing two primary control surfaces:
+mira is an open source control interface for an arbitrary number of individually addressable strip LEDs. It’s designed to make primary interactions obvious and reliable, while allowing for secondary interactions that are flexible and ridiculous. It does this by providing two primary control surfaces:
 
 - **mira panel**, a physical control with three easily understood knobs
 - **mira app**, a web interface
