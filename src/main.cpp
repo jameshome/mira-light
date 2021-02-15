@@ -9,7 +9,7 @@ void setup()
   TelnetPrint.begin();
 
   FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_LEDS);
-  FastLED.setBrightness(dimmerInit);
+  FastLED.setBrightness(dimmerInitState);
 
   preset_button.begin();
   preset_button.onPressed(preset_press);
@@ -19,10 +19,10 @@ void setup()
 
   ESP32Encoder::useInternalWeakPullResistors = UP;
   dimmer.attachSingleEdge(DIMMER_ENCODER_PIN_A, DIMMER_ENCODER_PIN_B);
-  dimmer.setCount(dimmerInit);
+  setBrightness(dimmerInitState);
 
   adjust.attachHalfQuad(ADJUST_ENCODER_PIN_A, ADJUST_ENCODER_PIN_B);
-  adjust.setCount(0);
+  setAdjuster(0);
 }
 
 void loop()
@@ -30,20 +30,24 @@ void loop()
   switch (activeMode)
   {
   case 0:
-    TelnetPrint.println("Off");
+    debugln("Off");
     startOff();
     break;
   case 1:
-    TelnetPrint.println("Stargaze");
+    debugln("Stargaze");
     startStargaze();
     break;
   case 2:
-    TelnetPrint.println("Relax");
+    debugln("Relax");
     startRelax();
     break;
   case 3:
-    TelnetPrint.println("Party");
+    debugln("Party");
     startParty();
+    break;
+  case 4:
+    debugln("Reveal");
+    startReveal();
     break;
   }
   ArduinoOTA.handle();

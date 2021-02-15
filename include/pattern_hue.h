@@ -2,20 +2,21 @@ class PatternHue
 {
 public:
   PatternHue(){};
-  void pattern_hue();
-  void pattern_hue_shift();
+  void variable_hue();
+  void shifting_hue();
+  void white();
 
 private:
   uint8_t hue = 0;
 };
 
-void PatternHue::pattern_hue()
+void PatternHue::variable_hue()
 {
   fill_solid(leds, NUM_LEDS, CHSV(getAdjustment(), 255, 255));
   FastLED.show();
 }
 
-void PatternHue::pattern_hue_shift()
+void PatternHue::shifting_hue()
 {
   int speed = getAdjustment();
 
@@ -29,4 +30,10 @@ void PatternHue::pattern_hue_shift()
     FastLED.show();
     hue++;
   }
+}
+
+void PatternHue::white()
+{
+  fill_solid(leds, NUM_LEDS, CHSV(getAdjustment(), 0, 255));
+  FastLED.show();
 }

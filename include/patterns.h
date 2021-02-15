@@ -14,26 +14,26 @@ void startOff()
 
 void startStargaze()
 {
-  dimmer.setCount(10);
-  adjust.setCount(0);
+  setBrightness(10);
+  setAdjuster(0);
   activePattern = true;
   PatternHue patternHue = PatternHue();
   while (activePattern)
   {
-    patternHue.pattern_hue();
+    patternHue.variable_hue();
     loopEvents();
   }
 }
 
 void startRelax()
 {
-  dimmer.setCount(20);
-  adjust.setCount(50);
+  setBrightness(20);
+  setAdjuster(50);
   activePattern = true;
   PatternHue patternHue = PatternHue();
   while (activePattern)
   {
-    patternHue.pattern_hue_shift();
+    patternHue.shifting_hue();
     loopEvents();
   }
 }
@@ -45,6 +45,19 @@ void startParty()
   while (activePattern)
   {
     patternRainbow.pattern_rainbow();
+    loopEvents();
+  }
+}
+
+void startReveal()
+{
+  setBrightness(250);
+  setAdjuster(0);
+  activePattern = true;
+  PatternHue patternHue = PatternHue();
+  while (activePattern)
+  {
+    patternHue.white();
     loopEvents();
   }
 }
