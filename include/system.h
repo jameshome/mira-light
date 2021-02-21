@@ -13,8 +13,6 @@
 #include <ESP32Encoder.h>
 
 // uC setup
-#define LED_PIN 22
-
 #define OFF_BUTTON_PIN 15
 #define STARGAZE_BUTTON_PIN 16
 #define RELAX_BUTTON_PIN 27
@@ -30,7 +28,12 @@
 #define ADJUST_ENCODER_PIN_B 27
 
 // LED setup
-#define NUM_LEDS 30
+#define LED_A_PIN 21
+#define LED_A_NUM_LEDS 3
+#define LED_B_PIN 22
+#define LED_B_NUM_LEDS 30
+#define NUM_LEDS (LED_A_NUM_LEDS + LED_B_NUM_LEDS)
+
 CRGB leds[NUM_LEDS];
 
 // Logging setup

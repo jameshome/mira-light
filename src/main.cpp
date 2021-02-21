@@ -8,7 +8,10 @@ void setup()
   setupOTA("mira", wifi_ssid, wifi_password);
   TelnetPrint.begin();
 
-  FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_LEDS);
+  FastLED.addLeds<NEOPIXEL, LED_A_PIN>(leds, 0, LED_A_NUM_LEDS);
+
+  FastLED.addLeds<NEOPIXEL, LED_B_PIN>(leds, LED_A_NUM_LEDS, LED_B_NUM_LEDS);
+
   FastLED.setBrightness(dimmerInitState);
 
   preset_button.begin();
