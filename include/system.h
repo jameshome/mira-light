@@ -48,7 +48,6 @@ void debug(char const *c)
   Serial.print(c);
   TelnetPrint.print(c);
 }
-
 void debugln(int i)
 {
   Serial.println(i);
@@ -82,7 +81,7 @@ void setBrightness(int16_t level)
   debugln(level);
 }
 
-void changeBrightness()
+void updateBrightness()
 {
   int16_t dimmerState = dimmer.getCount();
 
@@ -151,6 +150,7 @@ void setupOTA(const char *nameprefix, const char *ssid, const char *password)
     delay(5000);
     ESP.restart();
   }
+
   ArduinoOTA.onStart([]() {
     String type;
     if (ArduinoOTA.getCommand() == U_FLASH)
@@ -186,6 +186,14 @@ void setupOTA(const char *nameprefix, const char *ssid, const char *password)
   ArduinoOTA.begin();
   Serial.println("OTA @: ");
   Serial.println(WiFi.localIP());
+}
+
+void updateSystem()
+{
+  updateBrightness();
+  previous_pattern_button.read();
+  next_pattern_button.read();
+  ArduinoOTA.handle();
 }
 
 #endif

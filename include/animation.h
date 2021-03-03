@@ -4,7 +4,6 @@ public:
   Animation();
   ~Animation();
   void settings(uint8_t brightness = dimmerInitState, uint8_t adjustment = 0);
-  void update();
   void mirror();
   void animationSolid(uint8_t saturation = 255);
   void animationShiftingHue();
@@ -32,13 +31,6 @@ void Animation::settings(uint8_t brightness, uint8_t adjustment)
 {
   setBrightness(brightness);
   setAdjuster(adjustment);
-}
-
-void Animation::update()
-{
-  changeBrightness();
-  readPatternButtons();
-  ArduinoOTA.handle();
 }
 
 void Animation::mirror()

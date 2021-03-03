@@ -31,12 +31,6 @@ void selectPattern(int pattern)
   activePattern = pattern;
 }
 
-void readPatternButtons()
-{
-  previous_pattern_button.read();
-  next_pattern_button.read();
-}
-
 void browsePatterns(int delta)
 {
   int min = 0;
