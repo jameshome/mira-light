@@ -23,7 +23,7 @@ The first rotary encoder, or Dimmer, allows the default brightness of the select
 
 ### Adjuster
 
-The second rotary encoder, or Adjuster, changes behavior depending on the selected Pattern, allowing each pattern to have one axis of adjustment.
+The second rotary encoder, or Adjuster, changes behavior depending on the selected Pattern, allowing each Pattern to have one axis of adjustment.
 
 ### Mode Switch
 

@@ -1,5 +1,6 @@
 #include "system.h"
-#include "patterns.h"
+#include "pattern.h"
+#include "animation.h"
 
 void setup()
 {
@@ -14,43 +15,74 @@ void setup()
 
   FastLED.setBrightness(dimmerInitState);
 
-  preset_button.begin();
-  preset_button.onPressed(preset_press);
+  previous_pattern_button.begin();
+  previous_pattern_button.onPressed(previousPattern);
 
-  mode_button.begin();
-  mode_button.onPressed(mode_press);
+  next_pattern_button.begin();
+  next_pattern_button.onPressed(nextPattern);
 
-  ESP32Encoder::useInternalWeakPullResistors = UP;
   dimmer.attachSingleEdge(DIMMER_ENCODER_PIN_A, DIMMER_ENCODER_PIN_B);
-  setBrightness(dimmerInitState);
 
   adjust.attachHalfQuad(ADJUST_ENCODER_PIN_A, ADJUST_ENCODER_PIN_B);
-  setAdjuster(0);
 }
 
 void loop()
 {
-  switch (activeMode)
+
+  Animation a = Animation();
+
+  debug("Pattern set to ");
+  debugln(patterns[activePattern].name);
+
+  switch (activePattern)
   {
-  case 0:
-    debugln("Off");
-    startOff();
+  case 0: // Off
+    while (patternRunning)
+    {
+      FastLED.clear();
+      FastLED.show();
+      a.utilityUpdate();
+    }
     break;
-  case 1:
-    debugln("Stargaze");
-    startStargaze();
+  case 1: // Stargaze
+    a.settings(20);
+    while (patternRunning)
+    {
+      a.animationSolid();
+      a.utilityUpdate();
+    }
     break;
-  case 2:
-    debugln("Relax");
-    startRelax();
+  case 2: // Relax
+    a.settings(20, 10);
+    while (patternRunning)
+    {
+      a.animationShiftingHue();
+      a.utilityUpdate();
+    }
     break;
-  case 3:
-    debugln("Party");
-    startParty();
+  case 3: // Reveal
+    a.settings(150);
+    while (patternRunning)
+    {
+      a.animationSolid(0);
+      a.utilityUpdate();
+    }
     break;
-  case 4:
-    debugln("Reveal");
-    startReveal();
+  case 4: // Rainbow
+    a.settings(20, 10);
+    while (patternRunning)
+    {
+      a.animationRainbow();
+      a.utilityUpdate();
+    }
+    break;
+  case 5: // Sinelon
+    a.settings(100);
+    while (patternRunning)
+    {
+      a.animationSinelon();
+      a.utilityUpdate();
+    }
     break;
   }
   ArduinoOTA.handle();

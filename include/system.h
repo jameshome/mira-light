@@ -1,7 +1,7 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-#include "secrets.h"
+#include <secrets.h>
 #include <ESPmDNS.h>
 #include <WiFi.h>
 #include <WiFiUdp.h>
@@ -19,8 +19,8 @@
 #define PARTY_BUTTON_PIN 28
 #define REVEAL_BUTTON_PIN 29
 
-#define PRESET_BUTTON_PIN 33
-#define ADJUST_BUTTON_PIN 25
+#define PREVIOUS_PATTERN_BUTTON_PIN 33
+#define NEXT_PATTERN_BUTTON_PIN 25
 
 #define DIMMER_ENCODER_PIN_A 13
 #define DIMMER_ENCODER_PIN_B 14
@@ -29,10 +29,11 @@
 
 // LED setup
 #define LED_A_PIN 21
-#define LED_A_NUM_LEDS 3
+#define LED_A_NUM_LEDS 2
 #define LED_B_PIN 22
 #define LED_B_NUM_LEDS 30
 #define NUM_LEDS (LED_A_NUM_LEDS + LED_B_NUM_LEDS)
+#define HALF_NUM_LEDS (NUM_LEDS / 2)
 
 CRGB leds[NUM_LEDS];
 
@@ -47,6 +48,7 @@ void debug(char const *c)
   Serial.print(c);
   TelnetPrint.print(c);
 }
+
 void debugln(int i)
 {
   Serial.println(i);
@@ -56,44 +58,6 @@ void debugln(char const *c)
 {
   Serial.println(c);
   TelnetPrint.println(c);
-}
-
-// Modes and presets setup
-int activeMode = 0;
-int modeSwitchPositons = 5;
-bool activePattern = false;
-
-void selectMode(int mode)
-{
-  activePattern = false;
-  activeMode = mode;
-}
-
-void nextMode()
-{
-  activePattern = false;
-  debug("Mode set to ");
-  activeMode = (activeMode + 1) % modeSwitchPositons;
-}
-
-void nextPreset()
-{
-  activePattern = false;
-  debug("Preset changed: ");
-}
-
-EasyButton preset_button(PRESET_BUTTON_PIN);
-
-void preset_press()
-{
-  nextPreset();
-}
-
-EasyButton mode_button(ADJUST_BUTTON_PIN);
-
-void mode_press()
-{
-  nextMode();
 }
 
 // Dimmer setup
@@ -162,6 +126,11 @@ int getAdjustment()
   return adjustState;
 }
 
+// Button setup
+EasyButton previous_pattern_button(PREVIOUS_PATTERN_BUTTON_PIN);
+
+EasyButton next_pattern_button(NEXT_PATTERN_BUTTON_PIN);
+
 // OTA setup
 void setupOTA(const char *nameprefix, const char *ssid, const char *password)
 {
@@ -217,15 +186,6 @@ void setupOTA(const char *nameprefix, const char *ssid, const char *password)
   ArduinoOTA.begin();
   Serial.println("OTA @: ");
   Serial.println(WiFi.localIP());
-}
-
-// Event handling setup
-void loopEvents()
-{
-  changeBrightness();
-  preset_button.read();
-  mode_button.read();
-  ArduinoOTA.handle();
 }
 
 #endif
