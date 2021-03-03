@@ -10,25 +10,19 @@ void setup()
   TelnetPrint.begin();
 
   FastLED.addLeds<NEOPIXEL, LED_A_PIN>(leds, 0, LED_A_NUM_LEDS);
-
   FastLED.addLeds<NEOPIXEL, LED_B_PIN>(leds, LED_A_NUM_LEDS, LED_B_NUM_LEDS);
-
   FastLED.setBrightness(dimmerInitState);
 
   previous_pattern_button.begin();
   previous_pattern_button.onPressed(previousPattern);
-
   next_pattern_button.begin();
   next_pattern_button.onPressed(nextPattern);
-
   dimmer.attachSingleEdge(DIMMER_ENCODER_PIN_A, DIMMER_ENCODER_PIN_B);
-
   adjust.attachHalfQuad(ADJUST_ENCODER_PIN_A, ADJUST_ENCODER_PIN_B);
 }
 
 void loop()
 {
-
   Animation a = Animation();
 
   debug("Pattern set to ");

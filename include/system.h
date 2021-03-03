@@ -131,7 +131,7 @@ EasyButton previous_pattern_button(PREVIOUS_PATTERN_BUTTON_PIN);
 
 EasyButton next_pattern_button(NEXT_PATTERN_BUTTON_PIN);
 
-// OTA setup
+// Wifi & OTA setup
 void setupOTA(const char *nameprefix, const char *ssid, const char *password)
 {
   uint16_t maxlen = strlen(nameprefix) + 7;
