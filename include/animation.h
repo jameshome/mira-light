@@ -4,8 +4,8 @@ public:
   Animation();
   ~Animation();
   void settings(uint8_t brightness = dimmerInitState, uint8_t adjustment = 0);
-  void utilityUpdate();
-  void utilityMirror();
+  void update();
+  void mirror();
   void animationSolid(uint8_t saturation = 255);
   void animationShiftingHue();
   void animationRainbow();
@@ -34,14 +34,14 @@ void Animation::settings(uint8_t brightness, uint8_t adjustment)
   setAdjuster(adjustment);
 }
 
-void Animation::utilityUpdate()
+void Animation::update()
 {
   changeBrightness();
   readPatternButtons();
   ArduinoOTA.handle();
 }
 
-void Animation::utilityMirror()
+void Animation::mirror()
 {
   for (uint8_t i = 0; i < HALF_NUM_LEDS; i++)
   {
@@ -83,6 +83,6 @@ void Animation::animationSinelon()
   fadeToBlackBy(leds, HALF_NUM_LEDS, 25);
   int pos = beatsin16(10, 0, HALF_NUM_LEDS);
   leds[pos] += CHSV(getAdjustment(), 255, 192);
-  utilityMirror();
+  mirror();
   FastLED.show();
 }

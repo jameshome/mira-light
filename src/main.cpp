@@ -41,7 +41,7 @@ void loop()
     {
       FastLED.clear();
       FastLED.show();
-      a.utilityUpdate();
+      a.update();
     }
     break;
   case 1: // Stargaze
@@ -49,7 +49,7 @@ void loop()
     while (patternRunning)
     {
       a.animationSolid();
-      a.utilityUpdate();
+      a.update();
     }
     break;
   case 2: // Relax
@@ -57,7 +57,7 @@ void loop()
     while (patternRunning)
     {
       a.animationShiftingHue();
-      a.utilityUpdate();
+      a.update();
     }
     break;
   case 3: // Reveal
@@ -65,7 +65,7 @@ void loop()
     while (patternRunning)
     {
       a.animationSolid(0);
-      a.utilityUpdate();
+      a.update();
     }
     break;
   case 4: // Rainbow
@@ -73,7 +73,7 @@ void loop()
     while (patternRunning)
     {
       a.animationRainbow();
-      a.utilityUpdate();
+      a.update();
     }
     break;
   case 5: // Sinelon
@@ -81,7 +81,7 @@ void loop()
     while (patternRunning)
     {
       a.animationSinelon();
-      a.utilityUpdate();
+      a.update();
     }
     break;
   }
