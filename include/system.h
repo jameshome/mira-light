@@ -1,16 +1,19 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
+#include <EasyButton.h>
+#include <ESP32Encoder.h>
+#define FASTLED_INTERNAL
+#include <FastLED.h>
 #include <secrets.h>
+#include <FS.h>
 #include <ESPmDNS.h>
 #include <WiFi.h>
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
+#include <AsyncTCP.h>
+#include <ESPAsyncWebServer.h>
 #include <TelnetPrint.h>
-#include <EasyButton.h>
-#define FASTLED_INTERNAL
-#include <FastLED.h>
-#include <ESP32Encoder.h>
 
 // uC setup
 #define OFF_BUTTON_PIN 15
@@ -186,6 +189,15 @@ void setupOTA(const char *nameprefix, const char *ssid, const char *password)
   ArduinoOTA.begin();
   Serial.println("OTA @: ");
   Serial.println(WiFi.localIP());
+}
+
+AsyncWebServer server(80);
+
+const char *PARAM_MESSAGE = "message";
+
+void notFound(AsyncWebServerRequest *request)
+{
+  request->send(404, "text/plain", "Not found");
 }
 
 void updateSystem()

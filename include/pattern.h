@@ -18,7 +18,8 @@ Pattern patterns[] = {
     Pattern(2, "Relax"),
     Pattern(3, "Reveal"),
     Pattern(4, "Rainbow"),
-    Pattern(5, "Sinelon")};
+    Pattern(5, "Sinelon"),
+    Pattern(6, "Pacifica")};
 
 int activePattern = 0;
 int patternCount = (sizeof(patterns) / sizeof(*patterns));

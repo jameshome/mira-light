@@ -78,6 +78,14 @@ void loop()
       updateSystem();
     }
     break;
+  case 6: // Pacifica
+    a.settings(100);
+    while (patternRunning)
+    {
+      a.animationPacifica();
+      updateSystem();
+    }
+    break;
   }
   ArduinoOTA.handle();
 }
