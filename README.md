@@ -1,8 +1,16 @@
 # Mira Light
 
-**(Mira Light is pre-release — many features haven't been implemented yet)**
+**Mira Light is pre-release — here's the task list for 1.0.0:**
 
-Mira Light is an opinionated open source control interface for an arbitrary number of individually addressable strip-mounted LEDs, using the FastLED library running on an ESP32 microcontroller.
+- [x] **OTA updates** enabled
+- [x] Basic **Pattern object** selection logic
+- [x] **Animation objects** unloaded from memory on pattern change
+- [x] **Panel controls** work as intended
+- [ ] **Web controls** work as intended
+- [ ] Improved **Pattern object** selection logic
+- [ ] **Built-in patterns** chosen/designed
+
+Mira Light is an opinionated open source control interface for an arbitrary number of individually addressable strip-mounted LEDs, using the FastLED library running on an ESP32 microcontroller. It provides a set of consistent physical and web-based controls, pattern and animation object separation for convenience, stability, and performance.
 
 Mira Light is designed for marine cockpits, but it works great anywhere you need primary lighting controls to be obvious and reliable, while still allowing complete flexibility for visual ridiculousness.
 
