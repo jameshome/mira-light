@@ -15,12 +15,12 @@
 #include <ESPAsyncWebServer.h>
 #include <TelnetPrint.h>
 
-// uC setup
+// Setup uC
 #define OFF_BUTTON_PIN 15
 #define STARGAZE_BUTTON_PIN 16
-#define RELAX_BUTTON_PIN 27
-#define PARTY_BUTTON_PIN 28
-#define REVEAL_BUTTON_PIN 29
+#define RELAX_BUTTON_PIN 17
+#define PARTY_BUTTON_PIN 18
+#define REVEAL_BUTTON_PIN 19
 
 #define PREVIOUS_PATTERN_BUTTON_PIN 33
 #define NEXT_PATTERN_BUTTON_PIN 25
@@ -30,7 +30,7 @@
 #define ADJUST_ENCODER_PIN_A 26
 #define ADJUST_ENCODER_PIN_B 27
 
-// LED setup
+// Setup LEDs
 #define LED_A_PIN 21
 #define LED_A_NUM_LEDS 2
 #define LED_B_PIN 22
@@ -62,7 +62,7 @@ void debugln(char const *c)
   TelnetPrint.println(c);
 }
 
-// Dimmer setup
+// Setup dimmer
 ESP32Encoder dimmer;
 uint8_t dimmerInitState = 40;
 int16_t lastDimmerState = 0;
@@ -106,7 +106,7 @@ void updateBrightness()
   }
 }
 
-// Adjuster setup
+// Setup adjuster
 ESP32Encoder adjust;
 int16_t lastAdjustState = 0;
 
@@ -128,84 +128,19 @@ int getAdjustment()
   return adjustState;
 }
 
-// Button setup
+// Setup buttons
+EasyButton off_button(OFF_BUTTON_PIN);
+
+EasyButton stargaze_button(STARGAZE_BUTTON_PIN);
+
+EasyButton relax_button(RELAX_BUTTON_PIN);
+
+EasyButton party_button(PARTY_BUTTON_PIN);
+
+EasyButton reveal_button(REVEAL_BUTTON_PIN);
+
 EasyButton previous_pattern_button(PREVIOUS_PATTERN_BUTTON_PIN);
 
 EasyButton next_pattern_button(NEXT_PATTERN_BUTTON_PIN);
-
-// Wifi & OTA setup
-void setupOTA(const char *nameprefix, const char *ssid, const char *password)
-{
-  uint16_t maxlen = strlen(nameprefix) + 7;
-  char *fullhostname = new char[maxlen];
-  uint8_t mac[6];
-  WiFi.macAddress(mac);
-  snprintf(fullhostname, maxlen, "%s-%02x%02x%02x", nameprefix, mac[3], mac[4], mac[5]);
-  ArduinoOTA.setHostname(fullhostname);
-  delete[] fullhostname;
-
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
-
-  while (WiFi.waitForConnectResult() != WL_CONNECTED)
-  {
-    Serial.println("Failed to connect. Restarting");
-    delay(5000);
-    ESP.restart();
-  }
-
-  ArduinoOTA.onStart([]() {
-    String type;
-    if (ArduinoOTA.getCommand() == U_FLASH)
-      type = "sketch";
-    else
-      type = "filesystem";
-
-    Serial.println("Updating " + type);
-  });
-
-  ArduinoOTA.onEnd([]() {
-    Serial.println(" Success");
-  });
-
-  ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
-    Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
-  });
-
-  ArduinoOTA.onError([](ota_error_t error) {
-    Serial.printf("Error[%u]: ", error);
-    if (error == OTA_AUTH_ERROR)
-      Serial.println("\nAuth failed");
-    else if (error == OTA_BEGIN_ERROR)
-      Serial.println("\nBegin failed");
-    else if (error == OTA_CONNECT_ERROR)
-      Serial.println("\nConnection failed");
-    else if (error == OTA_RECEIVE_ERROR)
-      Serial.println("\nReceive failed");
-    else if (error == OTA_END_ERROR)
-      Serial.println("\nEnd failed");
-  });
-
-  ArduinoOTA.begin();
-  Serial.println("OTA @: ");
-  Serial.println(WiFi.localIP());
-}
-
-AsyncWebServer server(80);
-
-const char *PARAM_MESSAGE = "message";
-
-void notFound(AsyncWebServerRequest *request)
-{
-  request->send(404, "text/plain", "Not found");
-}
-
-void updateSystem()
-{
-  updateBrightness();
-  previous_pattern_button.read();
-  next_pattern_button.read();
-  ArduinoOTA.handle();
-}
 
 #endif

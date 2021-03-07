@@ -22,6 +22,8 @@ Pattern patterns[] = {
     Pattern(6, "Pacifica")};
 
 int activePattern = 0;
+int defaultParty = 5;
+
 int patternCount = (sizeof(patterns) / sizeof(*patterns));
 
 bool patternRunning = false;
@@ -34,7 +36,7 @@ void selectPattern(int pattern)
 
 void browsePatterns(int delta)
 {
-  int min = 0;
+  int min = 4;
   int max = patternCount - 1;
   const int mod = max + 1 - min;
   activePattern += delta - min;
