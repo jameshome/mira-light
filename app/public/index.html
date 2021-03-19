@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/img/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#232323" />
+    <meta name="description" content="Light your way." />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/img/logo-192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>Light — MIRA</title>
+    <style>
+      body {
+        color: rgba(255, 255, 255, 0.9);
+        background-color: rgba(35, 35, 35, 1);
+        font-family: "Barlow Semi Condensed";
+        font-weight: 500;
+        font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      @font-face {
+        font-family: "Barlow Semi Condensed";
+        font-style: normal;
+        font-weight: 500;
+        src: local(""), url("%PUBLIC_URL%/font.woff") format("woff");
+      }
+      noscript {
+        display: block;
+        margin: 150px auto 0;
+        padding: 20px;
+        text-align: center;
+        text-transform: uppercase;
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>
+      <img src="%PUBLIC_URL%/img/logo-512.png" width="150" /><br />
+      Mira Light requires a browser with JavaScript
+    </noscript>
+    <div id="root"></div>
+  </body>
+</html>

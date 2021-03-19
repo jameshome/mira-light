@@ -24,13 +24,7 @@ void setupNetwork(const char *hostname, const char *ssid, const char *password)
   ArduinoOTA.setHostname(fullhostname);
   delete[] fullhostname;
   ArduinoOTA.onStart([]() {
-    String type;
-    if (ArduinoOTA.getCommand() == U_FLASH)
-      type = "sketch";
-    else
-      type = "filesystem";
-
-    Serial.println("Updating " + type);
+    Serial.println("Updating MIRA");
   });
 
   ArduinoOTA.onEnd([]() {
@@ -58,20 +52,6 @@ void setupNetwork(const char *hostname, const char *ssid, const char *password)
   ArduinoOTA.begin();
   Serial.println("Running on ");
   Serial.println(WiFi.localIP());
-}
-
-// Setup HTTP server
-
-const char *PARAM_INPUT_1 = "output";
-const char *PARAM_INPUT_2 = "state";
-
-AsyncWebServer server(80);
-
-const char *PARAM_MESSAGE = "message";
-
-void serve404(AsyncWebServerRequest *request)
-{
-  request->send(404, "text/plain", "Not found");
 }
 
 #endif

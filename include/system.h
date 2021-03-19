@@ -6,13 +6,13 @@
 #define FASTLED_INTERNAL
 #include <FastLED.h>
 #include <secrets.h>
-#include <FS.h>
 #include <ESPmDNS.h>
 #include <WiFi.h>
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
-#include <AsyncTCP.h>
-#include <ESPAsyncWebServer.h>
+#define ARDUINOJSON_USE_LONG_LONG 1
+#include <ArduinoJson.h>
+#include <aWOT.h>
 #include <TelnetPrint.h>
 
 // Setup uC
@@ -37,6 +37,8 @@
 #define LED_B_NUM_LEDS 30
 #define NUM_LEDS (LED_A_NUM_LEDS + LED_B_NUM_LEDS)
 #define HALF_NUM_LEDS (NUM_LEDS / 2)
+
+#define TEST_PIN 32
 
 CRGB leds[NUM_LEDS];
 

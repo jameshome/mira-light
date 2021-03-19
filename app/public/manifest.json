@@ -1,0 +1,25 @@
+{
+  "short_name": "Mira Light",
+  "name": "Mira Light",
+  "icons": [
+    {
+      "src": "img/favicon.png",
+      "sizes": "128x128",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "img/logo-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "img/logo-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#232323",
+  "background_color": "#232323"
+}

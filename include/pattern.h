@@ -17,14 +17,15 @@ Pattern patterns[] = {
     Pattern(1, "Stargaze"),
     Pattern(2, "Relax"),
     Pattern(3, "Reveal"),
-    Pattern(4, "Rainbow"),
-    Pattern(5, "Sinelon"),
-    Pattern(6, "Pacifica")};
+    Pattern(4, "Pacifica"),
+    Pattern(5, "Rainbow"),
+    Pattern(6, "Sinelon"),
+    Pattern(7, "Fire 2012")};
+
+const int patternCount = (sizeof(patterns) / sizeof(*patterns));
 
 int activePattern = 0;
-int defaultParty = 5;
-
-int patternCount = (sizeof(patterns) / sizeof(*patterns));
+int defaultParty = 4;
 
 bool patternRunning = false;
 

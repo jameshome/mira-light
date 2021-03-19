@@ -4,29 +4,20 @@ public:
   Animation();
   ~Animation();
   void settings(uint8_t brightness = dimmerInitState, uint8_t adjustment = 0);
-  void mirror();
   void animationSolid(uint8_t saturation = 255);
   void animationShiftingHue();
   void animationRainbow();
   void animationSinelon();
   void animationPacifica();
+  void animationFire2012();
 
 private:
   uint8_t hue = 0;
+  void mirror();
   void pacifica_one_layer(CRGBPalette16 &p, uint16_t cistart, uint16_t wavescale, uint8_t bri, uint16_t ioff);
   void pacifica_add_whitecaps();
   void pacifica_deepen_colors();
 };
-
-CRGBPalette16 pacifica_palette_1 =
-    {0x000507, 0x000409, 0x00030B, 0x00030D, 0x000210, 0x000212, 0x000114, 0x000117,
-     0x000019, 0x00001C, 0x000026, 0x000031, 0x00003B, 0x000046, 0x14554B, 0x28AA50};
-CRGBPalette16 pacifica_palette_2 =
-    {0x000507, 0x000409, 0x00030B, 0x00030D, 0x000210, 0x000212, 0x000114, 0x000117,
-     0x000019, 0x00001C, 0x000026, 0x000031, 0x00003B, 0x000046, 0x0C5F52, 0x19BE5F};
-CRGBPalette16 pacifica_palette_3 =
-    {0x000208, 0x00030E, 0x000514, 0x00061A, 0x000820, 0x000927, 0x000B2D, 0x000C33,
-     0x000E39, 0x001040, 0x001450, 0x001860, 0x001C70, 0x002080, 0x1040BF, 0x2060FF};
 
 Animation::Animation()
 {
@@ -55,12 +46,16 @@ void Animation::mirror()
   }
 }
 
+// ——————————————————————————————————————————————
+// Solid
 void Animation::animationSolid(uint8_t saturation)
 {
   fill_solid(leds, NUM_LEDS, CHSV(getAdjustment(), saturation, 255));
   FastLED.show();
 }
 
+// ——————————————————————————————————————————————
+// Shifting Hue
 void Animation::animationShiftingHue()
 {
   int speed = getAdjustment();
@@ -76,6 +71,8 @@ void Animation::animationShiftingHue()
   }
 }
 
+// ——————————————————————————————————————————————
+// Rainbow
 void Animation::animationRainbow()
 {
   uint8_t delta = 200;
@@ -84,19 +81,32 @@ void Animation::animationRainbow()
   FastLED.show();
 }
 
+// ——————————————————————————————————————————————
+// Sinelon
 void Animation::animationSinelon()
 {
-  fadeToBlackBy(leds, HALF_NUM_LEDS, 25);
-  int pos = beatsin16(10, 0, HALF_NUM_LEDS);
-  leds[pos] += CHSV(getAdjustment(), 255, 192);
-  mirror();
+  fadeToBlackBy(leds, NUM_LEDS, 20);
+  int pos = beatsin16(13, 0, NUM_LEDS);
+  static int prevpos = 0;
+  if (pos < prevpos)
+  {
+    fill_solid(leds + pos, (prevpos - pos) + 1, CHSV(getAdjustment(), 255, 255));
+  }
+  else
+  {
+    fill_solid(leds + prevpos, (pos - prevpos) + 1, CHSV(getAdjustment(), 255, 255));
+  }
+  prevpos = pos;
   FastLED.show();
 }
 
+// ——————————————————————————————————————————————
+// Pacifica
+// by Mark Kriegsman and Mary Corey March
+// for Dan Garcia
 void Animation::animationPacifica()
 {
-  // Increment the four "color index start" counters, one for each wave layer.
-  // Each is incremented at a different speed, and the speeds vary over time.
+  // Increment the four "color index start" counters,one for each wave layer. Each is incremented at a different speed, and the speeds vary over time.
   static uint16_t sCIStart1, sCIStart2, sCIStart3, sCIStart4;
   static uint32_t sLastms = 0;
   uint32_t ms = GET_MILLIS();
@@ -115,13 +125,13 @@ void Animation::animationPacifica()
   // Clear out the LED array to a dim background blue-green
   fill_solid(leds, NUM_LEDS, CRGB(2, 6, 10));
 
-  // Render each of four layers, with different scales and speeds, that vary over time
-  Animation::pacifica_one_layer(pacifica_palette_1, sCIStart1, beatsin16(3, 11 * 256, 14 * 256), beatsin8(10, 70, 130), 0 - beat16(301));
-  Animation::pacifica_one_layer(pacifica_palette_2, sCIStart2, beatsin16(4, 6 * 256, 9 * 256), beatsin8(17, 40, 80), beat16(401));
-  Animation::pacifica_one_layer(pacifica_palette_3, sCIStart3, 6 * 256, beatsin8(9, 10, 38), 0 - beat16(503));
-  Animation::pacifica_one_layer(pacifica_palette_3, sCIStart4, 5 * 256, beatsin8(8, 10, 28), beat16(601));
+  // Render each of four 'waves', with different scales and speeds that vary over time
+  Animation::pacifica_one_layer(palette_pacifica_1, sCIStart1, beatsin16(3, 11 * 256, 14 * 256), beatsin8(10, 70, 130), 0 - beat16(301));
+  Animation::pacifica_one_layer(palette_pacifica_2, sCIStart2, beatsin16(4, 6 * 256, 9 * 256), beatsin8(17, 40, 80), beat16(401));
+  Animation::pacifica_one_layer(palette_pacifica_3, sCIStart3, 6 * 256, beatsin8(9, 10, 38), 0 - beat16(503));
+  Animation::pacifica_one_layer(palette_pacifica_3, sCIStart4, 5 * 256, beatsin8(8, 10, 28), beat16(601));
 
-  // Add brighter 'whitecaps' where the waves lines up more
+  // Add brighter 'whitecaps' where the four layers of 'waves' have lined up brightly
   Animation::pacifica_add_whitecaps();
 
   // Deepen the blues and greens a bit
@@ -149,7 +159,6 @@ void Animation::pacifica_one_layer(CRGBPalette16 &p, uint16_t cistart, uint16_t 
   }
 }
 
-// Add extra 'white' to areas where the four layers of light have lined up brightly
 void Animation::pacifica_add_whitecaps()
 {
   uint8_t basethreshold = beatsin8(9, 55, 65);
@@ -169,7 +178,6 @@ void Animation::pacifica_add_whitecaps()
   }
 }
 
-// Deepen the blues and greens
 void Animation::pacifica_deepen_colors()
 {
   for (uint16_t i = 0; i < NUM_LEDS; i++)
@@ -178,4 +186,57 @@ void Animation::pacifica_deepen_colors()
     leds[i].green = scale8(leds[i].green, 200);
     leds[i] |= CRGB(2, 5, 7);
   }
+}
+
+// ——————————————————————————————————————————————
+// Fire 2012
+// by Mark Kriegsman
+void Animation::animationFire2012()
+{
+  bool reverse = false;
+  uint8_t cooling = 55;
+  uint8_t sparking = 120;
+  CRGBPalette16 palette = HeatColors_p;
+
+  // Array of temperature readings at each simulation cell
+  static byte heat[NUM_LEDS];
+
+  // Cool down every cell a little
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+    heat[i] = qsub8(heat[i], random8(0, ((cooling * 10) / NUM_LEDS) + 2));
+  }
+
+  // Heat from each cell drifts 'up' and diffuses a little
+  for (int k = NUM_LEDS - 1; k >= 2; k--)
+  {
+    heat[k] = (heat[k - 1] + heat[k - 2] + heat[k - 2]) / 3;
+  }
+
+  // Randomly ignite new 'sparks' of heat near the bottom
+  if (random8() < sparking)
+  {
+    int y = random8(7);
+    heat[y] = qadd8(heat[y], random8(160, 255));
+  }
+
+  // Map from heat cells to LED colors
+  for (int j = 0; j < NUM_LEDS; j++)
+  {
+    byte colorindex = scale8(heat[j], 240);
+    CRGB color = ColorFromPalette(palette, colorindex);
+    int pixelnumber;
+    if (reverse)
+    {
+      pixelnumber = (NUM_LEDS - 1) - j;
+    }
+    else
+    {
+      pixelnumber = j;
+    }
+    leds[pixelnumber] = color;
+  }
+
+  FastLED.show();
+  FastLED.delay(1000 / 60);
 }

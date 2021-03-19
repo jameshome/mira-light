@@ -1,40 +1,40 @@
 #ifndef WEBSERVER_H
 #define WEBSERVER_H
+#include "../app/webserver/StaticFiles.h"
 
-void startWebserver()
+WiFiServer server(80);
+Application app;
+
+void readPatterns(Request &req, Response &res)
 {
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
-    request->send(200, "text/plain", "MIRA LIVES");
-  });
+  const int capacity = JSON_ARRAY_SIZE(patternCount) + patternCount * JSON_OBJECT_SIZE(2);
+  StaticJsonDocument<capacity> doc;
 
-  server.on("/get", HTTP_GET, [](AsyncWebServerRequest *request) {
-    String message;
-    if (request->hasParam(PARAM_MESSAGE))
-    {
-      message = request->getParam(PARAM_MESSAGE)->value();
-    }
-    else
-    {
-      message = "No message sent";
-    }
-    request->send(200, "text/plain", "Hello, GET: " + message);
-  });
+  for (int i = 0; i < patternCount; i++)
+  {
+    doc[i]["id"] = patterns[i].id;
+    doc[i]["name"] = patterns[i].name;
+  }
+  res.set("Content-Type", "application/json");
+  serializeJson(doc, res);
+}
 
-  server.on("/post", HTTP_POST, [](AsyncWebServerRequest *request) {
-    String message;
-    if (request->hasParam(PARAM_MESSAGE, true))
-    {
-      message = request->getParam(PARAM_MESSAGE, true)->value();
-    }
-    else
-    {
-      message = "No message sent";
-    }
-    request->send(200, "text/plain", "Hello, POST: " + message);
-  });
+void readAnimation(Request &req, Response &res)
+{
+  DynamicJsonDocument doc(256);
+  doc["name"] = patterns[activePattern].name;
+  doc["brightness"] = dimmer.getCount();
+  res.set("Content-Type", "application/json");
+  serializeJson(doc, res);
+}
 
-  server.onNotFound(serve404);
-  server.begin();
+void updateAnimation(Request &req, Response &res)
+{
+  DynamicJsonDocument doc(256);
+  deserializeJson(doc, req);
+  selectPattern(doc["id"]);
+  setBrightness(doc["brightness"]);
+  return readAnimation(req, res);
 }
 
 #endif

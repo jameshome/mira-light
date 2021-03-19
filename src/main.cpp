@@ -1,6 +1,7 @@
 #include "system.h"
 #include "network.h"
 #include "pattern.h"
+#include "palette.h"
 #include "animation.h"
 #include "webserver.h"
 
@@ -37,14 +38,27 @@ void update()
     previous_pattern_button.read();
     next_pattern_button.read();
   }
+
+  // Check for OTA updates
   ArduinoOTA.handle();
+
+  // Check for web requests
+  WiFiClient client = server.available();
+  if (client.connected())
+  {
+    app.process(&client);
+  }
 }
 
 void setup()
 {
+  pinMode(TEST_PIN, OUTPUT);
+
   Serial.begin(115200);
   Serial.println("MIRA LIVES");
+
   setupNetwork("mira", wifi_ssid, wifi_password);
+
   TelnetPrint.begin();
 
   FastLED.addLeds<NEOPIXEL, LED_A_PIN>(leds, 0, LED_A_NUM_LEDS);
@@ -90,7 +104,13 @@ void setup()
   dimmer.attachSingleEdge(DIMMER_ENCODER_PIN_A, DIMMER_ENCODER_PIN_B);
 
   adjust.attachHalfQuad(ADJUST_ENCODER_PIN_A, ADJUST_ENCODER_PIN_B);
-  startWebserver();
+
+  // Start web server
+  app.get("/api/patterns", &readPatterns);
+  app.get("/api/animation", &readAnimation);
+  app.put("/api/animation", &updateAnimation);
+  app.use(staticFiles());
+  server.begin();
 }
 
 void loop()
@@ -134,7 +154,15 @@ void loop()
       update();
     }
     break;
-  case 4: // Rainbow
+  case 4: // Pacifica
+    a.settings(100);
+    while (patternRunning)
+    {
+      a.animationPacifica();
+      update();
+    }
+    break;
+  case 5: // Rainbow
     a.settings(20, 10);
     while (patternRunning)
     {
@@ -142,7 +170,7 @@ void loop()
       update();
     }
     break;
-  case 5: // Sinelon
+  case 6: // Sinelon
     a.settings(100);
     while (patternRunning)
     {
@@ -150,11 +178,10 @@ void loop()
       update();
     }
     break;
-  case 6: // Pacifica
-    a.settings(100);
+  case 7: // Fire 2012
     while (patternRunning)
     {
-      a.animationPacifica();
+      a.animationFire2012();
       update();
     }
     break;
