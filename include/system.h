@@ -15,7 +15,7 @@
 #include <aWOT.h>
 #include <TelnetPrint.h>
 
-// Setup uC
+// Setup Panel inputs
 #define OFF_BUTTON_PIN 15
 #define STARGAZE_BUTTON_PIN 16
 #define RELAX_BUTTON_PIN 17
@@ -38,11 +38,9 @@
 #define NUM_LEDS (LED_A_NUM_LEDS + LED_B_NUM_LEDS)
 #define HALF_NUM_LEDS (NUM_LEDS / 2)
 
-#define TEST_PIN 32
-
 CRGB leds[NUM_LEDS];
 
-// Logging setup
+// Setup logging
 void debug(int i)
 {
   Serial.print(i);
@@ -132,17 +130,11 @@ int getAdjustment()
 
 // Setup buttons
 EasyButton off_button(OFF_BUTTON_PIN);
-
 EasyButton stargaze_button(STARGAZE_BUTTON_PIN);
-
 EasyButton relax_button(RELAX_BUTTON_PIN);
-
 EasyButton party_button(PARTY_BUTTON_PIN);
-
 EasyButton reveal_button(REVEAL_BUTTON_PIN);
-
 EasyButton previous_pattern_button(PREVIOUS_PATTERN_BUTTON_PIN);
-
 EasyButton next_pattern_button(NEXT_PATTERN_BUTTON_PIN);
 
 #endif

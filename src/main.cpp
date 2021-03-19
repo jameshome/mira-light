@@ -23,16 +23,17 @@ void update()
   {
     selectPattern(2);
   }
-  party_button.read();
-  if (party_button.wasPressed())
-  {
-    selectPattern(defaultParty);
-  }
   reveal_button.read();
   if (reveal_button.wasPressed())
   {
     selectPattern(3);
   }
+  party_button.read();
+  if (party_button.wasPressed())
+  {
+    selectPattern(defaultParty);
+  }
+  // Activate Party mode buttons
   if (activePattern > 3)
   {
     previous_pattern_button.read();
@@ -52,8 +53,6 @@ void update()
 
 void setup()
 {
-  pinMode(TEST_PIN, OUTPUT);
-
   Serial.begin(115200);
   Serial.println("MIRA LIVES");
 
@@ -89,16 +88,16 @@ void setup()
     selectPattern(2);
   }
 
-  party_button.begin();
-  if (digitalRead(PARTY_BUTTON_PIN) == LOW)
-  {
-    selectPattern(defaultParty);
-  }
-
   reveal_button.begin();
   if (digitalRead(REVEAL_BUTTON_PIN) == LOW)
   {
     selectPattern(3);
+  }
+
+  party_button.begin();
+  if (digitalRead(PARTY_BUTTON_PIN) == LOW)
+  {
+    selectPattern(defaultParty);
   }
 
   dimmer.attachSingleEdge(DIMMER_ENCODER_PIN_A, DIMMER_ENCODER_PIN_B);
@@ -116,75 +115,17 @@ void setup()
 void loop()
 {
   Animation a = Animation();
-
   debug("Pattern set to ");
   debugln(patterns[activePattern].name);
 
-  switch (activePattern)
+  a.brightness(patterns[activePattern].brightness);
+  a.adjustment(patterns[activePattern].adjustment);
+  FastLED.clear();
+  while (patternRunning)
   {
-  case 0: // Off
-    while (patternRunning)
-    {
-      FastLED.clear();
-      FastLED.show();
-      update();
-    }
-    break;
-  case 1: // Stargaze
-    a.settings(20);
-    while (patternRunning)
-    {
-      a.animationSolid();
-      update();
-    }
-    break;
-  case 2: // Relax
-    a.settings(20, 10);
-    while (patternRunning)
-    {
-      a.animationShiftingHue();
-      update();
-    }
-    break;
-  case 3: // Reveal
-    a.settings(150);
-    while (patternRunning)
-    {
-      a.animationSolid(0);
-      update();
-    }
-    break;
-  case 4: // Pacifica
-    a.settings(100);
-    while (patternRunning)
-    {
-      a.animationPacifica();
-      update();
-    }
-    break;
-  case 5: // Rainbow
-    a.settings(20, 10);
-    while (patternRunning)
-    {
-      a.animationRainbow();
-      update();
-    }
-    break;
-  case 6: // Sinelon
-    a.settings(100);
-    while (patternRunning)
-    {
-      a.animationSinelon();
-      update();
-    }
-    break;
-  case 7: // Fire 2012
-    while (patternRunning)
-    {
-      a.animationFire2012();
-      update();
-    }
-    break;
+    a.selector(patterns[activePattern].name);
+    FastLED.show();
+    update();
   }
-  ArduinoOTA.handle();
+  update();
 }

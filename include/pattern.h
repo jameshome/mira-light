@@ -1,26 +1,28 @@
 class Pattern
 {
 public:
-  int id;
   const char *name;
-  Pattern(int patternId, char const *patternName);
+  uint8_t brightness;
+  uint8_t adjustment;
+  Pattern(char const *patternName, uint8_t patternBrightness, uint8_t patternAdjustment);
 };
 
-Pattern::Pattern(int patternId, char const *patternName)
+Pattern::Pattern(char const *patternName, uint8_t patternBrightness = dimmerInitState, uint8_t patternAdjustment = 0)
 {
-  id = patternId;
   name = patternName;
+  brightness = patternBrightness;
+  adjustment = patternAdjustment;
 }
 
 Pattern patterns[] = {
-    Pattern(0, "Off"),
-    Pattern(1, "Stargaze"),
-    Pattern(2, "Relax"),
-    Pattern(3, "Reveal"),
-    Pattern(4, "Pacifica"),
-    Pattern(5, "Rainbow"),
-    Pattern(6, "Sinelon"),
-    Pattern(7, "Fire 2012")};
+    Pattern("Off"),
+    Pattern("Stargaze", 20),
+    Pattern("Relax", 20, 10),
+    Pattern("Reveal", 100),
+    Pattern("Pacifica", 100),
+    Pattern("Rainbow", 20, 10),
+    Pattern("Sinelon", 100),
+    Pattern("Fire 2012", 50)};
 
 const int patternCount = (sizeof(patterns) / sizeof(*patterns));
 

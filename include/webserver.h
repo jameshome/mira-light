@@ -12,7 +12,7 @@ void readPatterns(Request &req, Response &res)
 
   for (int i = 0; i < patternCount; i++)
   {
-    doc[i]["id"] = patterns[i].id;
+    doc[i]["id"] = i;
     doc[i]["name"] = patterns[i].name;
   }
   res.set("Content-Type", "application/json");

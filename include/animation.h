@@ -3,17 +3,19 @@ class Animation
 public:
   Animation();
   ~Animation();
-  void settings(uint8_t brightness = dimmerInitState, uint8_t adjustment = 0);
+  void selector(char const *pattern);
+  void brightness(uint8_t brightness = dimmerInitState);
+  void adjustment(uint8_t adjustment = 0);
+
+private:
+  uint8_t hue = 0;
+  void mirror();
   void animationSolid(uint8_t saturation = 255);
   void animationShiftingHue();
   void animationRainbow();
   void animationSinelon();
   void animationPacifica();
   void animationFire2012();
-
-private:
-  uint8_t hue = 0;
-  void mirror();
   void pacifica_one_layer(CRGBPalette16 &p, uint16_t cistart, uint16_t wavescale, uint8_t bri, uint16_t ioff);
   void pacifica_add_whitecaps();
   void pacifica_deepen_colors();
@@ -32,9 +34,45 @@ Animation::~Animation(void)
   debugln("—————————————————————");
 }
 
-void Animation::settings(uint8_t brightness, uint8_t adjustment)
+void Animation::selector(char const *pattern)
+{
+  if (strcmp(pattern, "Stargaze") == 0)
+  {
+    animationSolid();
+  }
+  else if (strcmp(pattern, "Relax") == 0)
+  {
+    animationShiftingHue();
+  }
+  else if (strcmp(pattern, "Reveal") == 0)
+  {
+    animationSolid(0);
+  }
+  else if (strcmp(pattern, "Pacifica") == 0)
+  {
+    animationPacifica();
+  }
+  else if (strcmp(pattern, "Rainbow") == 0)
+  {
+    animationRainbow();
+  }
+  else if (strcmp(pattern, "Sinelon") == 0)
+  {
+    animationSinelon();
+  }
+  else if (strcmp(pattern, "Fire 2012") == 0)
+  {
+    animationFire2012();
+  }
+}
+
+void Animation::brightness(uint8_t brightness)
 {
   setBrightness(brightness);
+}
+
+void Animation::adjustment(uint8_t adjustment)
+{
   setAdjuster(adjustment);
 }
 
