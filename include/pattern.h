@@ -25,10 +25,7 @@ Pattern patterns[] = {
     Pattern("Fire 2012", 50)};
 
 const int patternCount = (sizeof(patterns) / sizeof(*patterns));
-
 int activePattern = 0;
-int defaultParty = 4;
-
 bool patternRunning = false;
 
 void selectPattern(int pattern)

@@ -31,7 +31,7 @@ void update()
   party_button.read();
   if (party_button.wasPressed())
   {
-    selectPattern(defaultParty);
+    selectPattern(4);
   }
   // Activate Party mode buttons
   if (activePattern > 3)
@@ -48,6 +48,7 @@ void update()
   if (client.connected())
   {
     app.process(&client);
+    client.stop();
   }
 }
 
@@ -97,7 +98,7 @@ void setup()
   party_button.begin();
   if (digitalRead(PARTY_BUTTON_PIN) == LOW)
   {
-    selectPattern(defaultParty);
+    selectPattern(4);
   }
 
   dimmer.attachSingleEdge(DIMMER_ENCODER_PIN_A, DIMMER_ENCODER_PIN_B);

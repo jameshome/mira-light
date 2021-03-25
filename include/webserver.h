@@ -22,6 +22,7 @@ void readPatterns(Request &req, Response &res)
 void readAnimation(Request &req, Response &res)
 {
   DynamicJsonDocument doc(256);
+  doc["id"] = activePattern;
   doc["name"] = patterns[activePattern].name;
   doc["brightness"] = dimmer.getCount();
   res.set("Content-Type", "application/json");

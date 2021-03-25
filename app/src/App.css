@@ -1,22 +1,204 @@
-.App {
+a {
+  color: rgba(230, 34, 230, 1);
+}
+
+.message {
+  padding: 20px;
+  text-align: center;
+  text-transform: uppercase;
+  line-height: 1.6;
+}
+
+.panel {
+  display: flex;
+  flex-flow: column nowrap;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.loader {
+  width: 25px;
+  height: 25px;
+  margin: 20px auto;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 100%;
+  animation: loader-frames 0.75s infinite ease-in-out;
 }
 
-.App-header {
-  min-height: 100vh;
+@keyframes loader-frames {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+.logo {
+  margin: 50px 0 0 0;
+  height: 250px;
+  background-color: transparent;
+  background-image: url(./img/logo.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transition: all 0.75s ease-in-out;
+}
+
+.stargaze .logo,
+.relax .logo,
+.party .logo,
+.reveal .logo {
+  margin: 0;
+  height: 100px;
+  background-color: rgba(35, 35, 35, 1);
+  transition: all 0.2s ease-in-out;
+  transition-delay: 0.1s;
+}
+
+.logotype {
+  margin-top: -30px;
+  height: 60px;
+  background-image: url(./img/logotype.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 1;
+  visibility: shown;
+  transition-delay: 0.75s;
+  transition: all 0.75s ease-in;
+}
+
+.stargaze .logotype,
+.relax .logotype,
+.party .logotype,
+.reveal .logotype {
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.1s ease-out;
+}
+
+.off .logo,
+.off .logotype {
+  opacity: 0.4;
+}
+
+.label {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 20px 20px 140px;
+}
+
+.label h1 {
+  display: inline;
+  padding: 4px 24px;
+  border-radius: 2.5rem;
+  font-size: 1.6rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  background-color: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.controls {
+  display: none;
+}
+
+.party-selector {
+  text-align: left;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+}
+
+.party-selector li {
+  margin: 20px;
+  color: rgba(230, 34, 230, 1);
+}
+
+.party-selector .active {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.off .controls.off,
+.stargaze .controls.stargaze,
+.relax .controls.relax,
+.party .controls.party,
+.reveal .controls.reveal {
+  display: block;
+  overflow-x: hidden;
+}
+
+.modes {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(35, 35, 35, 1);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  height: 100px;
 }
 
-.App-link {
-  color: #61dafb;
+.mode {
+  height: 100px;
+  flex: 1;
+  opacity: 0.6;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.mode.off {
+  background-image: url(./img/icon-off.svg);
+}
+
+.mode.stargaze {
+  background-image: url(./img/icon-stargaze.svg);
+}
+
+.mode.relax {
+  background-image: url(./img/icon-relax.svg);
+}
+
+.mode.party {
+  background-image: url(./img/icon-party.svg);
+}
+
+.mode.reveal {
+  background-image: url(./img/icon-reveal.svg);
+}
+
+.off .mode.off,
+.stargaze .mode.stargaze,
+.relax .mode.relax,
+.party .mode.party,
+.reveal .mode.reveal {
+  opacity: 1;
+  background-color: rgba(17, 17, 17, 1);
+}
+
+.indicator {
+  display: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin: auto;
+  background-color: rgba(230, 34, 230, 1);
+}
+
+.off .mode.off .indicator,
+.stargaze .mode.stargaze .indicator,
+.relax .mode.relax .indicator,
+.party .mode.party .indicator,
+.reveal .mode.reveal .indicator {
+  display: block;
 }

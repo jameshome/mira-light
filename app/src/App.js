@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import logo from "./img/logo-mira.svg";
 import "./App.css";
 
 function App(props) {
@@ -11,7 +10,7 @@ function App(props) {
     getAnimation();
     const interval = setInterval(() => {
       getAnimation();
-    }, 1000);
+    }, 2000);
     return () => {
       clearInterval(interval);
     };
@@ -24,7 +23,7 @@ function App(props) {
         setPatterns(data);
       })
       .catch(function (err) {
-        setError("No patterns found");
+        setError("Oops, something went wrong");
       });
   }, []);
 
@@ -35,7 +34,7 @@ function App(props) {
         setAnimation(data);
       })
       .catch(function (err) {
-        setError("fetch failed");
+        setError("Oops, something went wrong");
       });
   };
 
@@ -52,39 +51,91 @@ function App(props) {
         setAnimation(data);
       })
       .catch(function (err) {
-        setError("fetch failed");
+        setError("Oops, something went wrong");
       });
   };
 
+  const logo = () => {
+    return (
+      <div>
+        <div className="logo" aria-label="Mira"></div>
+        <div className="logotype"></div>
+      </div>
+    );
+  };
+
+  const modeTab = (id) => {
+    let modeClass = id !== 4 ? patterns[id].name.toLowerCase() : "party";
+    return (
+      <li
+        aria-label={modeClass}
+        onClick={() => updateAnimation(id)}
+        className={`mode ${modeClass} ${animation.id === id ? "selected" : ""}`}
+      >
+        <div className="indicator"></div>
+      </li>
+    );
+  };
+
+  let activeMode = "loading";
+
   if (error) {
-    return <p>ERROR: {error}</p>;
+    return (
+      <div className="message">
+        {logo()}
+        <p>
+          {error}
+          <br />
+          <a href="/">Try again</a>
+        </p>
+      </div>
+    );
   } else if (!animation || !patterns) {
-    return <p>Loading...</p>;
+    return (
+      <div className="message">
+        {logo()}
+        <div className="loader"></div>
+      </div>
+    );
   } else {
     let partyPatterns = [...patterns];
     partyPatterns.splice(0, 4);
+    activeMode = animation.id < 4 ? animation.name.toLowerCase() : "party";
 
     return (
-      <div className="App">
-        <header className="App-header">
-          <p>
-            MIRA running {animation.name} at {animation.brightness}
-          </p>
-          <img src={logo} className="App-logo" alt="logo" />
-          <button onClick={() => updateAnimation(0)}>OFF</button>
-          <button onClick={() => updateAnimation(1)}>STARGAZE</button>
-          <button onClick={() => updateAnimation(2)}>RELAX</button>
-          <button onClick={() => updateAnimation(4)}>PARTY</button>
-          <button onClick={() => updateAnimation(3)}>REVEAL</button>
+      <div className={`panel ${activeMode}`}>
+        {logo()}
+        <div className={`controls stargaze`}></div>
+        <div className={`controls relax`}></div>
+        <div className={`controls party`}>
+          <ul className="party-selector">
+            {partyPatterns.map((item, key) => {
+              return (
+                <li
+                  key={key}
+                  className={`${animation.id === item.id ? "active" : ""}`}
+                  onClick={() => updateAnimation(item.id)}
+                  aria-label={item.name}
+                >
+                  {item.name}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        <div className={`controls reveal`}></div>
 
-          {partyPatterns.map((item, key) => {
-            return (
-              <li key={key}>
-                {item.id} - {item.name}
-              </li>
-            );
-          })}
-        </header>
+        <div className="label">
+          <h1>{activeMode}</h1>
+        </div>
+
+        <ul className="modes">
+          {modeTab(0)}
+          {modeTab(1)}
+          {modeTab(2)}
+          {modeTab(4)}
+          {modeTab(3)}
+        </ul>
       </div>
     );
   }
