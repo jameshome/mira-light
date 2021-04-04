@@ -1,16 +1,40 @@
+class AnimationState
+{
+public:
+  uint8_t hue;
+  uint8_t saturation;
+  uint8_t speed;
+  AnimationState(
+      uint8_t animationHue,
+      uint8_t animationSaturation,
+      uint8_t animationSpeed);
+};
+
+AnimationState::AnimationState(
+    uint8_t animationHue = 0,
+    uint8_t animationSaturation = 255,
+    uint8_t animationSpeed = 0)
+{
+  hue = animationHue;
+  saturation = animationSaturation;
+  speed = animationSpeed;
+};
+
+AnimationState current = AnimationState();
+
 class Animation
 {
+
 public:
   Animation();
   ~Animation();
-  void selector(char const *pattern);
-  void brightness(uint8_t brightness = dimmerInitState);
-  void adjustment(uint8_t adjustment = 0);
+  void select(char const *pattern);
+  void adjust(uint8_t adjustment);
 
 private:
-  uint8_t hue = 0;
   void mirror();
-  void animationSolid(uint8_t saturation = 255);
+  void animationOff();
+  void animationSolid();
   void animationShiftingHue();
   void animationRainbow();
   void animationSinelon();
@@ -34,19 +58,23 @@ Animation::~Animation(void)
   debugln("—————————————————————");
 }
 
-void Animation::selector(char const *pattern)
+void Animation::select(char const *pattern)
 {
-  if (strcmp(pattern, "Stargaze") == 0)
+  if (strcmp(pattern, "Off") == 0)
+  {
+    animationOff();
+  }
+  else if (strcmp(pattern, "Stargaze") == 0)
   {
     animationSolid();
   }
   else if (strcmp(pattern, "Relax") == 0)
   {
-    animationShiftingHue();
+    animationSolid();
   }
   else if (strcmp(pattern, "Reveal") == 0)
   {
-    animationSolid(0);
+    animationSolid();
   }
   else if (strcmp(pattern, "Pacifica") == 0)
   {
@@ -64,16 +92,19 @@ void Animation::selector(char const *pattern)
   {
     animationFire2012();
   }
+  else if (strcmp(pattern, "Shifting Hue") == 0)
+  {
+    animationShiftingHue();
+  }
 }
 
-void Animation::brightness(uint8_t brightness)
+void Animation::adjust(uint8_t adjustment)
 {
-  setBrightness(brightness);
-}
-
-void Animation::adjustment(uint8_t adjustment)
-{
-  setAdjuster(adjustment);
+  uint8_t adjustState = readAdjuster();
+  if (adjustment != adjustState)
+  {
+    setAdjuster(adjustment);
+  }
 }
 
 void Animation::mirror()
@@ -85,10 +116,18 @@ void Animation::mirror()
 }
 
 // ——————————————————————————————————————————————
-// Solid
-void Animation::animationSolid(uint8_t saturation)
+// Off
+void Animation::animationOff()
 {
-  fill_solid(leds, NUM_LEDS, CHSV(getAdjustment(), saturation, 255));
+  FastLED.show();
+}
+
+// ——————————————————————————————————————————————
+// Solid
+void Animation::animationSolid()
+{
+  // adjust(hue);
+  fill_solid(leds, NUM_LEDS, CHSV(current.hue, current.saturation, 255));
   FastLED.show();
 }
 
@@ -96,16 +135,16 @@ void Animation::animationSolid(uint8_t saturation)
 // Shifting Hue
 void Animation::animationShiftingHue()
 {
-  int speed = getAdjustment();
+  int speed = readAdjuster();
   for (int i = 0; i < NUM_LEDS; i++)
   {
-    leds[i] = CHSV(hue, 200, 255);
+    leds[i] = CHSV(current.hue, 200, 255);
   }
   EVERY_N_MILLIS_I(hueShift, speed)
   {
     hueShift.setPeriod(speed);
     FastLED.show();
-    hue++;
+    current.hue++;
   }
 }
 
@@ -115,7 +154,7 @@ void Animation::animationRainbow()
 {
   uint8_t delta = 200;
   uint8_t density = 1;
-  fill_rainbow(leds, NUM_LEDS, hue += density, delta);
+  fill_rainbow(leds, NUM_LEDS, current.hue += density, delta);
   FastLED.show();
 }
 
@@ -128,11 +167,11 @@ void Animation::animationSinelon()
   static int prevpos = 0;
   if (pos < prevpos)
   {
-    fill_solid(leds + pos, (prevpos - pos) + 1, CHSV(getAdjustment(), 255, 255));
+    fill_solid(leds + pos, (prevpos - pos) + 1, CHSV(readAdjuster(), 255, 255));
   }
   else
   {
-    fill_solid(leds + prevpos, (pos - prevpos) + 1, CHSV(getAdjustment(), 255, 255));
+    fill_solid(leds + prevpos, (pos - prevpos) + 1, CHSV(readAdjuster(), 255, 255));
   }
   prevpos = pos;
   FastLED.show();

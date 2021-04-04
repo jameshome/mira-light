@@ -38,6 +38,9 @@
 #define NUM_LEDS (LED_A_NUM_LEDS + LED_B_NUM_LEDS)
 #define HALF_NUM_LEDS (NUM_LEDS / 2)
 
+#define BRIGHTNESS_INIT 50
+#define BRIGHTNESS_MAX 225
+
 CRGB leds[NUM_LEDS];
 
 // Setup logging
@@ -48,8 +51,8 @@ void debug(int i)
 }
 void debug(char const *c)
 {
-  Serial.print(c);
-  TelnetPrint.print(c);
+  Serial.print(F(c));
+  TelnetPrint.print(F(c));
 }
 void debugln(int i)
 {
@@ -58,39 +61,40 @@ void debugln(int i)
 }
 void debugln(char const *c)
 {
-  Serial.println(c);
-  TelnetPrint.println(c);
+  Serial.println(F(c));
+  TelnetPrint.println(F(c));
 }
 
 // Setup dimmer
 ESP32Encoder dimmer;
-uint8_t dimmerInitState = 40;
-int16_t lastDimmerState = 0;
-uint8_t brightnessMax = 255;
+uint8_t brightness = BRIGHTNESS_INIT;
+uint8_t lastDimmerState = 0;
 
-void setBrightness(int16_t level)
+void setBrightness(uint8_t level)
 {
   if (level < 5)
   {
     level = 5;
   }
-  else if (level > brightnessMax)
+  else if (level > BRIGHTNESS_MAX)
   {
-    level = (brightnessMax - 5);
+    level = (BRIGHTNESS_MAX - 5);
   }
+  brightness = level;
   dimmer.setCount(level);
   FastLED.setBrightness(level);
   debug("Brightness set to ");
   debugln(level);
 }
 
-void updateBrightness()
+void readDimmer()
 {
-  int16_t dimmerState = dimmer.getCount();
+  uint8_t dimmerState = dimmer.getCount();
 
   if (dimmerState != lastDimmerState)
   {
-    if (dimmerState > dimmerInitState)
+    // increase dimmer increment when above initial brightness
+    if (dimmerState > BRIGHTNESS_INIT)
     {
       if (dimmerState < lastDimmerState)
       {
@@ -108,21 +112,21 @@ void updateBrightness()
 
 // Setup adjuster
 ESP32Encoder adjust;
-int16_t lastAdjustState = 0;
+uint8_t lastAdjustState = 0;
 
-void setAdjuster(int8_t level)
+void setAdjuster(uint8_t level)
 {
   adjust.setCount(level);
 }
 
-int getAdjustment()
+uint8_t readAdjuster()
 {
   uint8_t adjustState = adjust.getCount();
 
   if (adjustState != lastAdjustState)
   {
     lastAdjustState = adjustState;
-    debug("Adjustment set to ");
+    debug("Adjuster set to ");
     debugln(adjustState);
   }
   return adjustState;

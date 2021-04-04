@@ -1,5 +1,5 @@
-a {
-  color: rgba(230, 34, 230, 1);
+.indicator {
+  display: none;
 }
 
 .message {
@@ -35,52 +35,143 @@ a {
 }
 
 .logo {
+  position: relative;
   margin: 50px 0 0 0;
-  height: 250px;
+  height: 270px;
   background-color: transparent;
   background-image: url(./img/logo.svg);
   background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  transition: all 0.75s ease-in-out;
+  background-position: top;
+  background-size: 250px;
+  transition: all 0.5s ease-in-out;
 }
 
-.stargaze .logo,
-.relax .logo,
-.party .logo,
-.reveal .logo {
+.logo.dimmed {
+  opacity: 0.4;
+}
+
+.logo.collapsed {
   margin: 0;
   height: 100px;
-  background-color: rgba(35, 35, 35, 1);
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-image: url(./img/logo.svg);
+  background-repeat: no-repeat;
+  background-position: top;
+  background-size: 100px;
   transition: all 0.2s ease-in-out;
-  transition-delay: 0.1s;
+}
+
+.refresh {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  opacity: 0;
+  background-image: url(./img/icon-reload.svg);
+  background-repeat: no-repeat;
+  background-size: 48px;
+}
+
+.logo.collapsed .refresh {
+  position: fixed;
+  opacity: 0.4;
+  transition-delay: 2s;
+  transition: all 0.2s ease-in-out;
 }
 
 .logotype {
-  margin-top: -30px;
-  height: 60px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 75px;
   background-image: url(./img/logotype.svg);
   background-repeat: no-repeat;
   background-position: center;
-  background-size: contain;
+  background-size: 200px;
   opacity: 1;
   visibility: shown;
-  transition-delay: 0.75s;
-  transition: all 0.75s ease-in;
+  transition: opacity 0.5s ease-in;
 }
 
-.stargaze .logotype,
-.relax .logotype,
-.party .logotype,
-.reveal .logotype {
+.logo.collapsed .logotype {
   visibility: hidden;
+  transform: scale(0);
   opacity: 0;
-  transition: all 0.1s ease-out;
+  transition: all 0.25s ease-out;
 }
 
-.off .logo,
-.off .logotype {
-  opacity: 0.4;
+.controls {
+  margin-top: 100px;
+}
+
+.controls div {
+  margin: auto;
+}
+
+.control-brightness {
+  padding: 24px;
+  background-image: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.1) 0%,
+      rgba(0, 0, 0, 0) 100%
+    ),
+    url(./img/icon-brightness.svg);
+  background-repeat: repeat-x, no-repeat;
+  background-position: center, 12px 12px;
+}
+
+.control-color {
+  padding: 24px;
+  background-image: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.1) 0%,
+      rgba(0, 0, 0, 0) 100%
+    ),
+    url(./img/icon-palette.svg);
+  background-repeat: repeat-x, no-repeat;
+  background-position: center, 12px 12px;
+}
+
+.control-party {
+  text-align: left;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+}
+
+.control-party button {
+  font-size: 1.6rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  display: block;
+  position: relative;
+  margin: 16px 20px;
+  padding-left: 20px;
+  color: rgba(230, 34, 230, 1);
+}
+
+.control-party .selected {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.control-party .selected .indicator {
+  display: block;
+  position: absolute;
+  top: 10px;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 8px solid rgba(255, 255, 255, 0.9);
 }
 
 .label {
@@ -103,37 +194,6 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.controls {
-  display: none;
-}
-
-.party-selector {
-  text-align: left;
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  font-size: 1.4rem;
-  text-transform: uppercase;
-}
-
-.party-selector li {
-  margin: 20px;
-  color: rgba(230, 34, 230, 1);
-}
-
-.party-selector .active {
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.off .controls.off,
-.stargaze .controls.stargaze,
-.relax .controls.relax,
-.party .controls.party,
-.reveal .controls.reveal {
-  display: block;
-  overflow-x: hidden;
-}
-
 .modes {
   display: flex;
   flex-flow: row nowrap;
@@ -150,11 +210,13 @@ a {
 }
 
 .mode {
+  position: relative;
   height: 100px;
   flex: 1;
   opacity: 0.6;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: top 20px center;
+  background-color: transparent;
 }
 
 .mode.off {
@@ -177,28 +239,20 @@ a {
   background-image: url(./img/icon-reveal.svg);
 }
 
-.off .mode.off,
-.stargaze .mode.stargaze,
-.relax .mode.relax,
-.party .mode.party,
-.reveal .mode.reveal {
+.mode.selected {
   opacity: 1;
   background-color: rgba(17, 17, 17, 1);
 }
 
-.indicator {
-  display: none;
+.mode.selected .indicator {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   width: 6px;
   height: 6px;
   border-radius: 50%;
   margin: auto;
   background-color: rgba(230, 34, 230, 1);
-}
-
-.off .mode.off .indicator,
-.stargaze .mode.stargaze .indicator,
-.relax .mode.relax .indicator,
-.party .mode.party .indicator,
-.reveal .mode.reveal .indicator {
-  display: block;
 }

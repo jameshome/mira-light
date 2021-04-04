@@ -1,14 +1,19 @@
 # Mira Light
 
-**Mira Light is pre-release — here's the task list for 1.0.0:**
+**Mira Light is pre-release — here's the task list for 1.0:**
 
 - [x] **OTA updates** enabled
 - [x] Basic **Pattern object** selection logic
 - [x] **Animation objects** unloaded from memory on Pattern change
 - [x] **Panel controls** work as intended
-- [ ] **App controls** work as intended
-- [ ] Improved **Pattern object** selection logic
+- [x] Basic **App controls** work as intended
+- [x] Improved **Pattern object** selection logic
 - [ ] **Built-in Patterns** chosen/designed
+
+**Coming in 1.1**
+
+- [ ] Advanced **App controls**, responsive to Pattern object variables, allowing live manipulation of multiple Colors and Palettes
+- [ ] **More built-in Patterns** chosen/designed
 
 Mira Light is an opinionated open source control interface for an arbitrary number of individually addressable strip-mounted LEDs, using the FastLED library running on an ESP32 microcontroller. It provides a set of consistent physical and web-based controls, pattern and animation object separation for convenience, stability, and performance.
 
@@ -48,35 +53,6 @@ Mode Switch changes start each Pattern with its default Dimmer and Adjuster sett
 ## App
 
 The App is a React-based web interface that mirrors the functionality of the Mode Switch, with additional interactive elements to make color selection and Pattern exploration easier. The web app interacts with the microcontroller over a JSON-based API.
-
-### API
-
-- api/animation - pattern
-  - id
-  - name
-  - brightness
-  - speed
-  - color
-    - [ ]
-  - palette
-    - [ ]
-- api/patterns
-  - id
-  - name
-- api/palettes
-
-  - id
-  - name
-
-  ```json
-  {
-    "pattern": { "name": "Pacifica", "id": 6 },
-    "brightness": 35,
-    "speed": 0,
-    "color": [],
-    "palette": ["palette_pacifica_1", "palette_pacifica_2", "palette_pacifica_3"]
-  }
-  ```
 
 ## Hardware installation
 
