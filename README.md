@@ -15,7 +15,7 @@
 - [ ] Advanced **App controls**, responsive to Pattern object variables, allowing live manipulation of multiple Colors and Palettes
 - [ ] **More built-in Patterns** chosen/designed
 
-Mira Light is an open source control interface for an arbitrary number of individually addressable strip-mounted LEDs, using the FastLED library running on an ESP32 microcontroller. It features a React-based web app and a hardware design for a panel of physical controls which are designed to work together. It also provides some logical structure for Pattern definition, selection, and activation with the goals of consistency, stability, and performance.
+Mira Light is an open source control interface for an arbitrary number of individually addressable strip-mounted LEDs, using the FastLED library running on an ESP32 microcontroller. It features a React-based web app running on the microcontroller and a hardware design for a panel of physical controls which are designed to work together. It also provides some logical structure for Pattern definition, selection, and activation with the goals of consistency, stability, and performance.
 
 Mira Light is designed for marine cockpits, but it works great anywhere you need lighting controls to be obvious and reliable, with the option of complete flexibility for visual ridiculousness.
 
@@ -28,7 +28,9 @@ It accomplishes this by providing two interfaces to dozens of lighting configura
 
 The Panel consists of a five position switch and a pair of rotary encoders with push buttons.
 
-An SVG of the panel useful for fabrication is included in the repository's `/hardware` directory.
+An SVG of the panel useful for fabrication and an example wiring schematic is included in the repository's `/hardware` directory.
+
+**Note**: The hardware is designed to work with a 12V marine power system, and addresses power management issues specific to that use case. Adapt to your own use case accordingly.
 
 ### Dimmer
 
@@ -36,7 +38,7 @@ The first rotary encoder, or Dimmer, allows the default brightness of the select
 
 ### Adjuster
 
-The second rotary encoder, or Adjuster, changes behavior depending on the selected Pattern, allowing each Pattern to have one axis of physical adjustment on the Panel.
+The second rotary encoder, or Adjuster, changes behavior depending on the selected Pattern, allowing each Pattern to have one axis of physical adjustment on the Panel. For example, for a one color Pattern the Adjuster would change hue.
 
 ### Mode Switch
 
@@ -53,10 +55,6 @@ Mode Switch changes start each Pattern with its default Dimmer and Adjuster sett
 ## App
 
 The App is a React-based web interface that mirrors the functionality of the Mode Switch, with additional interactive elements to make color selection and Pattern exploration easier. The web app interacts with the microcontroller over a JSON-based API.
-
-## Hardware installation
-
-There's an example schematic in the `/hardware` directory. Note that the hardware is designed to work with a 12V marine power system, and addresses several power management issues specific to that use case. Adapt to your own use case accordingly.
 
 ## Software installation
 
