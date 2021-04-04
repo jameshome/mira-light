@@ -1,6 +1,6 @@
 {
   "name": "mira-light",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "private": true,
   "dependencies": {
     "@jaames/iro": "^5.4.0",
@@ -43,7 +43,7 @@
   "awot-static": {
     "sources": "./build",
     "indexFile": "index.html",
-    "sketchDir": "./webserver",
+    "sketchDir": "./cpp",
     "exclude": [
       "*.map",
       "service-worker.js"

@@ -15,9 +15,9 @@
 - [ ] Advanced **App controls**, responsive to Pattern object variables, allowing live manipulation of multiple Colors and Palettes
 - [ ] **More built-in Patterns** chosen/designed
 
-Mira Light is an opinionated open source control interface for an arbitrary number of individually addressable strip-mounted LEDs, using the FastLED library running on an ESP32 microcontroller. It provides a set of consistent physical and web-based controls, pattern and animation object separation for convenience, stability, and performance.
+Mira Light is an open source control interface for an arbitrary number of individually addressable strip-mounted LEDs, using the FastLED library running on an ESP32 microcontroller. It features a React-based web app and a hardware design for a panel of physical controls which are designed to work together. It also provides some logical structure for Pattern definition, selection, and activation with the goals of consistency, stability, and performance.
 
-Mira Light is designed for marine cockpits, but it works great anywhere you need primary lighting controls to be obvious and reliable, while still allowing complete flexibility for visual ridiculousness.
+Mira Light is designed for marine cockpits, but it works great anywhere you need lighting controls to be obvious and reliable, with the option of complete flexibility for visual ridiculousness.
 
 It accomplishes this by providing two interfaces to dozens of lighting configurations, or Patterns:
 

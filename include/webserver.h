@@ -1,6 +1,6 @@
 #ifndef WEBSERVER_H
 #define WEBSERVER_H
-#include "../app/webserver/StaticFiles.h"
+#include "../app/cpp/StaticFiles.h"
 
 WiFiServer server(80);
 Application app;
