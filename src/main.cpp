@@ -5,11 +5,13 @@
 #include "animation.h"
 #include "webserver.h"
 
+
 // UPDATE runs after each Animation's while loop
 void update()
 {
   // Read dimmer changes
   readDimmer();
+  adjustBrightness();
 
   // Read physical button changes
   off_button.read();
@@ -27,8 +29,8 @@ void update()
   {
     selectPattern(2);
   }
-  reveal_button.read();
-  if (reveal_button.wasPressed())
+  daze_button.read();
+  if (daze_button.wasPressed())
   {
     selectPattern(3);
   }
@@ -59,17 +61,20 @@ void update()
 // SETUP runs once at boot
 void setup()
 {
-
   Serial.begin(115200);
   Serial.println("MIRA LIVES");
 
-  setupNetwork("mira", wifi_ssid, wifi_password);
+  setupNetwork("mira-light", wifi_ssid, wifi_password);
 
   TelnetPrint.begin();
 
-  FastLED.addLeds<NEOPIXEL, LED_A_PIN>(leds, 0, LED_A_NUM_LEDS);
-  FastLED.addLeds<NEOPIXEL, LED_B_PIN>(leds, LED_A_NUM_LEDS, LED_B_NUM_LEDS);
+  unsigned int ledOffset = 0;
 
+  FastLED.addLeds<NEOPIXEL, CHANNEL_1A_PIN>(leds, ledOffset, CHANNEL_1_NUM_LEDS);
+  ledOffset = ledOffset + CHANNEL_1A_NUM_LEDS; 
+  FastLED.addLeds<NEOPIXEL, CHANNEL_1B_PIN>(leds, ledOffset, CHANNEL_1B_NUM_LEDS);
+  ledOffset = ledOffset + CHANNEL_1B_NUM_LEDS; 
+  FastLED.addLeds<NEOPIXEL, CHANNEL_2_PIN>(leds, ledOffset, CHANNEL_2_NUM_LEDS);
   FastLED.setBrightness(BRIGHTNESS_INIT);
 
   previous_pattern_button.begin();
@@ -96,8 +101,8 @@ void setup()
     selectPattern(2);
   }
 
-  reveal_button.begin();
-  if (digitalRead(REVEAL_BUTTON_PIN) == LOW)
+  daze_button.begin();
+  if (digitalRead(DAZE_BUTTON_PIN) == LOW)
   {
     selectPattern(3);
   }
@@ -120,21 +125,19 @@ void setup()
   server.begin();
 }
 
+
+
 // LOOP runs once whenever a new Animation begins
 void loop()
 {
   Animation a = Animation();
-
   debug("Pattern set to ");
   debugln(patterns[activePattern].name);
-
   setBrightness(patterns[activePattern].brightness);
+  setAdjuster(patterns[activePattern].adjustment);
   current.hue = patterns[activePattern].hue;
   current.saturation = patterns[activePattern].saturation;
-  current.speed = patterns[activePattern].speed;
-
   FastLED.clear();
-
   while (patternRunning)
   {
     a.select(patterns[activePattern].name);

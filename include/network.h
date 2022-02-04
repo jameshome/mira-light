@@ -7,6 +7,7 @@ void setupNetwork(const char *hostname, const char *ssid, const char *password)
 
   // Connect to WiFi
   WiFi.mode(WIFI_STA);
+  WiFi.setHostname(hostname); 
   WiFi.begin(ssid, password);
   while (WiFi.waitForConnectResult() != WL_CONNECTED)
   {

@@ -225,7 +225,7 @@ export default function App(props) {
     switch (props.mode) {
       case "stargaze":
       case "relax":
-      case "reveal":
+      case "daze":
         return (
           <div className="controls">
             <Brightness animation={props.animation} />

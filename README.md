@@ -48,7 +48,7 @@ The five position switch, or Mode Switch, chooses between five modes:
 - **Stargaze**: starts a Pattern that preserves night vision, suitable for stargazing or making a log entry on a moonless night.
 - **Relax**: starts a Pattern that is just right for relaxing in the cockpit as the sun goes down.
 - **Party**: starts a Pattern that does something visually ridiculous. It also enables the rotary encoder push buttons as the Pattern Explorer — pushing the left one starts the previous Pattern; pushing the right one starts the next Pattern. The Pattern Explorer skips the Mode Switch Patterns, and the buttons are disabled in all but Party mode.
-- **Reveal**: starts a Pattern that acts as the blinding light of reason: all white, full brightness. For emergencies.
+- **Daze**: starts a Pattern that acts as the blinding light of reason: all white, full brightness. For emergencies.
 
 Mode Switch changes start each Pattern with its default Dimmer and Adjuster settings, discarding any changes made previously in the session.
 

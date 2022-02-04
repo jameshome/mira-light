@@ -23,10 +23,10 @@ void readAnimation(Request &req, Response &res)
   DynamicJsonDocument json(256);
   json["id"] = activePattern;
   json["name"] = patterns[activePattern].name;
+  json["adjustment"] = current.adjustment;
   json["brightness"] = brightness;
   json["hue"] = current.hue;
   json["saturation"] = current.saturation;
-  json["speed"] = current.speed;
   res.set("Content-Type", "application/json");
   serializeJson(json, res);
 }
@@ -46,7 +46,7 @@ void updateAnimation(Request &req, Response &res)
   }
   if (json["hue"] && json["saturation"])
   {
-    current.hue = json["hue"];
+    setAdjuster(json["hue"]);
     current.saturation = json["saturation"];
   }
   return readAnimation(req, res);

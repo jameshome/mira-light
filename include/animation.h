@@ -1,23 +1,23 @@
 class AnimationState
 {
 public:
+  uint8_t adjustment;
   uint8_t hue;
   uint8_t saturation;
-  uint8_t speed;
   AnimationState(
+      uint8_t animationAdjustment,
       uint8_t animationHue,
-      uint8_t animationSaturation,
-      uint8_t animationSpeed);
+      uint8_t animationSaturation);
 };
 
 AnimationState::AnimationState(
+    uint8_t animationAdjustment = 0,
     uint8_t animationHue = 0,
-    uint8_t animationSaturation = 255,
-    uint8_t animationSpeed = 0)
+    uint8_t animationSaturation = 255)
 {
+  adjustment = animationAdjustment;
   hue = animationHue;
   saturation = animationSaturation;
-  speed = animationSpeed;
 };
 
 AnimationState current = AnimationState();
@@ -29,7 +29,6 @@ public:
   Animation();
   ~Animation();
   void select(char const *pattern);
-  void adjust(uint8_t adjustment);
 
 private:
   void mirror();
@@ -40,6 +39,7 @@ private:
   void animationSinelon();
   void animationPacifica();
   void animationFire2012();
+  void animationVuMeter();
   void pacifica_one_layer(CRGBPalette16 &p, uint16_t cistart, uint16_t wavescale, uint8_t bri, uint16_t ioff);
   void pacifica_add_whitecaps();
   void pacifica_deepen_colors();
@@ -72,7 +72,7 @@ void Animation::select(char const *pattern)
   {
     animationSolid();
   }
-  else if (strcmp(pattern, "Reveal") == 0)
+  else if (strcmp(pattern, "Daze") == 0)
   {
     animationSolid();
   }
@@ -96,14 +96,9 @@ void Animation::select(char const *pattern)
   {
     animationShiftingHue();
   }
-}
-
-void Animation::adjust(uint8_t adjustment)
-{
-  uint8_t adjustState = readAdjuster();
-  if (adjustment != adjustState)
+  else if (strcmp(pattern, "VU Meter") == 0)
   {
-    setAdjuster(adjustment);
+    animationVuMeter();
   }
 }
 
@@ -126,8 +121,7 @@ void Animation::animationOff()
 // Solid
 void Animation::animationSolid()
 {
-  // adjust(hue);
-  fill_solid(leds, NUM_LEDS, CHSV(current.hue, current.saturation, 255));
+  fill_solid(leds, NUM_LEDS, CHSV(readAdjuster(), current.saturation, 255));
   FastLED.show();
 }
 
@@ -163,7 +157,7 @@ void Animation::animationRainbow()
 void Animation::animationSinelon()
 {
   fadeToBlackBy(leds, NUM_LEDS, 20);
-  int pos = beatsin16(13, 0, NUM_LEDS);
+  int pos = beatsin16(2, 0, NUM_LEDS);
   static int prevpos = 0;
   if (pos < prevpos)
   {
@@ -316,4 +310,46 @@ void Animation::animationFire2012()
 
   FastLED.show();
   FastLED.delay(1000 / 60);
+}
+
+// ——————————————————————————————————————————————
+// VU Meter
+void Animation::animationVuMeter()
+{
+
+  // define the variables needed for the audio levels
+  int lvl = 0, minLvl = 0, maxLvl = 500; // tweak the min and max as needed
+debugln("audio");
+
+  int n, height;
+  n = analogRead(MIC_PIN);
+  debugln("pin: ");
+  debugln(n);
+
+  n = abs(1745 - n);
+  debugln(n);
+
+  //n = (n <= NOISE) ? 0 : abs(n - NOISE);
+  //debugln("noise: ");
+  //debugln(n);
+
+  // apply the exponential filter to smooth the raw signal
+  ADCFilter.Filter(n);
+  lvl = ADCFilter.Current();
+debugln("level: ");
+debugln(lvl);
+
+  height = NUM_LEDS * (lvl - minLvl) / (long)(maxLvl - minLvl);
+
+debugln("height: ");
+  debugln(height);
+
+  for (uint8_t i = 0; i < NUM_LEDS; i++) {
+    if (i >= height) {
+      leds[i] = CRGB(0, 0, 0);
+    } else {
+      leds[i] = CRGB(255, 0, 0);
+    } 
+  }
+  FastLED.show();
 }
